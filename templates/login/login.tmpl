@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>admin/login</title>
+    <style>
+        /* 全局样式重置与基础配置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        /* 页面背景渐变 + 全屏居中 */
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        /* 登录卡片容器 */
+        .login-container {
+            background-color: #ffffff;
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            transition: transform 0.3s ease;
+        }
+
+        .login-container:hover {
+            transform: translateY(-5px);
+        }
+
+        /* 表单标题 */
+        .login-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* 表单组样式 */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        /* Label样式 */
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* 输入框样式 */
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            outline: none;
+            background-color: #f9f9f9;
+        }
+
+        /* 输入框聚焦样式 */
+        .form-group input:focus {
+            border-color: #667eea;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* 密码输入框单独优化 */
+        .form-group input[type="password"] {
+            letter-spacing: 2px;
+        }
+
+        /* 按钮组：统一所有按钮的间距和布局 */
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px; /* 统一按钮间距 */
+            margin-top: 15px;
+        }
+
+        /* 所有按钮统一基础样式（核心：和登录按钮格式一致） */
+        .form-btn {
+            width: 100%;
+            padding: 14px; /* 统一内边距，和登录按钮一致 */
+            border-radius: 8px; /* 统一圆角 */
+            font-size: 16px; /* 统一字体大小 */
+            font-weight: 600; /* 统一字体粗细 */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            letter-spacing: 0.5px; /* 统一字间距 */
+        }
+
+        /* 登录按钮样式（主按钮） */
+        .login-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        /* 注册按钮样式（次要主色调按钮，格式和登录一致） */
+        .register-btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%); /* 绿色渐变区分功能 */
+            color: white;
+        }
+
+        /* 返回按钮样式（次要灰色按钮，格式和登录一致） */
+        .return-btn {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%); /* 灰色渐变 */
+            color: white;
+        }
+
+        /* 所有按钮统一hover效果 */
+        .login-btn:hover, .register-btn:hover, .return-btn:hover {
+            opacity: 0.95;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* 统一阴影效果 */
+        }
+
+        /* 所有按钮统一点击效果 */
+        .form-btn:active {
+            transform: scale(0.98); /* 统一按下缩放效果 */
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <h2 class="login-title">用户登录/注册</h2>
+
+    <!-- 登录/注册共用表单 -->
+    <form id="authForm" method="POST">
+        <div class="form-group">
+            <label for="id">账号 (ID)</label>
+            <input type="text" id="id" name="id" required placeholder="请输入账号">
+        </div>
+        <div class="form-group">
+            <label for="password">密码 (Password)</label>
+            <input type="password" id="password" name="password" required placeholder="请输入密码">
+        </div>
+
+        <!-- 按钮组：登录+注册+返回 统一布局 -->
+        <div class="btn-group">
+            <!-- 登录按钮 -->
+            <button type="button" onclick="submitForm('/blog/admin/login/signIn')" class="form-btn login-btn">登录 (Login)</button>
+            <!-- 注册按钮（统一样式） -->
+            <button type="button" onclick="submitForm('/blog/admin/login/signUp')" class="form-btn register-btn">注册 (Register)</button>
+            <!-- 返回按钮（统一样式） -->
+            <button type="button" onclick="goBack()" class="form-btn return-btn">返回 (Return)</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // 登录/注册提交函数
+    function submitForm(targetUrl) {
+        const form = document.getElementById('authForm');
+        form.action = targetUrl;
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+        form.submit();
+    }
+
+    // 返回按钮跳转函数
+    function goBack() {
+        window.location.href = '/blog/admin/login';
+    }
+</script>
+</body>
+</html>
