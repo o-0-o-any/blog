@@ -28,6 +28,7 @@ func InitRouters() *gin.Engine {
 		"templates/dashboard/layout.tmpl",
 		"templates/dashboard/edit.tmpl",
 		"templates/dashboard/info.tmpl",
+		"templates/dashboard/infoEdit.tmpl",
 	)
 
 	// 注册Session中间件到全部路由中
@@ -63,7 +64,7 @@ func InitRouters() *gin.Engine {
 			}
 			// 每个用户的仪表盘
 			// 仪表盘
-			dashboardGroup := adminGroup.Group("/dashboard")
+			dashboardGroup := adminGroup.Group("/:id/dashboard")
 			{
 				// 仪表盘主页
 				dashboardGroup.GET("/", controller.DashboardIndexHandler)
@@ -71,8 +72,10 @@ func InitRouters() *gin.Engine {
 				// 博客编辑
 				dashboardGroup.GET("/edit", controller.EditHandler)
 				dashboardGroup.POST("/edit", controller.PostEditHandler)
-				// 个人信息展示
+				// 个人信息
 				dashboardGroup.GET("/info", controller.InfoHandler)
+				dashboardGroup.GET("/info/edit", controller.EditInfoHTMLHandler)
+				dashboardGroup.POST("/info/edit", controller.EditInfoHandler)
 			}
 		}
 

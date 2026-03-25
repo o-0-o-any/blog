@@ -7,6 +7,7 @@ type UserModel struct {
 	Name      string `gorm:"default: '暂未设置'"`
 	Age       int
 	Gender    string
+	Email     string
 	Password  string
 	Role      int `gorm:"default: 1"`
 	CreatedAt time.Time

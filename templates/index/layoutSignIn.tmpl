@@ -123,7 +123,7 @@
     <script>
         // 跳转到后台首页
         function goDashboard() {
-            window.location.href = "/blog/admin/dashboard";
+            window.location.href = "/blog/admin/" + {{ .name }} + "/dashboard";
         }
 
         // 【修复版】使用表单提交，让后端正常渲染延时跳转页面

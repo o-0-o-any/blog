@@ -414,8 +414,7 @@
 
 <script>
     function editProfile() {
-        alert('编辑资料功能正在开发中...');
-        // window.location.href = '/blog/admin/dashboard/edit-profile';
+        window.location.href = '/blog/admin/' + '{{.id}}' + '/dashboard/info/edit';
     }
     
     function changePassword() {

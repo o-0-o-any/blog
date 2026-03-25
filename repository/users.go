@@ -39,3 +39,11 @@ func GetUser(id string) (models.UserModel, error) {
 	}
 	return user, nil
 }
+
+func UpdateUser(user models.UserModel) error {
+	err := db.DB.Model(&user).Updates(user).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}

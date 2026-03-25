@@ -97,17 +97,17 @@
     <script>
         // 导航到仪表板主页
         function goToDashboardIndex() {
-            window.location.href = "/blog/admin/dashboard/index";
+            window.location.href = "/blog/admin/" + {{ .id }} + "/dashboard/index";
         }
 
         // 导航到编辑博客页面
         function goToDashboardEdit() {
-            window.location.href = "/blog/admin/dashboard/edit";
+            window.location.href = "/blog/admin/" + {{ .id }} + "/dashboard/edit";
         }
 
         // 导航到个人信息页面
         function goToDashboardInfo() {
-            window.location.href = "/blog/admin/dashboard/info";
+            window.location.href = "/blog/admin/" + {{ .id }} + "/dashboard/info";
         }
 
         // 返回博客主页
