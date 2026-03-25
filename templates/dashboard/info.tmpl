@@ -1,0 +1,446 @@
+{{ template "layout" . }}
+{{define "title"}}个人信息{{end}}
+{{define "content"}}
+<div class="info-container">
+    <h1>个人信息</h1>
+    
+    <div class="user-info-card">
+        <div class="info-header">
+            <h2>用户资料</h2>
+            <div class="status-indicator">
+                <span class="status-dot"></span>
+                <span class="status-text">在线</span>
+            </div>
+        </div>
+        
+        <div class="info-content">
+            <div class="info-section">
+                <h3>基本信息</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">
+                            <span class="icon">👤</span>
+                            <span>用户ID</span>
+                        </div>
+                        <div class="info-value">
+                            {{if .id}}
+                                <span class="value-text">{{.id}}</span>
+                            {{else}}
+                                <span class="value-placeholder">未设置</span>
+                            {{end}}
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">
+                            <span class="icon">📝</span>
+                            <span>用户名</span>
+                        </div>
+                        <div class="info-value">
+                            {{if .name}}
+                                <span class="value-text">{{.name}}</span>
+                            {{else}}
+                                <span class="value-placeholder">未设置</span>
+                            {{end}}
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">
+                            <span class="icon">📧</span>
+                            <span>邮箱</span>
+                        </div>
+                        <div class="info-value">
+                            {{if .email}}
+                                <span class="value-text">{{.email}}</span>
+                            {{else}}
+                                <span class="value-placeholder">未设置</span>
+                            {{end}}
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">
+                            <span class="icon">📅</span>
+                            <span>注册时间</span>
+                        </div>
+                        <div class="info-value">
+                            {{if .created_at}}
+                                <span class="value-text">{{.created_at}}</span>
+                            {{else}}
+                                <span class="value-placeholder">未知</span>
+                            {{end}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <h3>账户状态</h3>
+                <div class="status-grid">
+                    <div class="status-item">
+                        <div class="status-icon">✅</div>
+                        <div class="status-details">
+                            <div class="status-title">账户状态</div>
+                            <div class="status-value active">正常</div>
+                        </div>
+                    </div>
+                    
+                    <div class="status-item">
+                        <div class="status-icon">🛡️</div>
+                        <div class="status-details">
+                            <div class="status-title">权限等级</div>
+                            <div class="status-value">
+                                {{if .role}}
+                                    <span class="role-badge">{{.role}}</span>
+                                {{else}}
+                                    <span class="role-badge">普通用户</span>
+                                {{end}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <h3>操作</h3>
+                <div class="action-buttons">
+                    <button class="action-btn edit-btn" onclick="editProfile()">
+                        <span class="btn-icon">✏️</span>
+                        <span>编辑资料</span>
+                    </button>
+                    <button class="action-btn change-pwd-btn" onclick="changePassword()">
+                        <span class="btn-icon">🔒</span>
+                        <span>修改密码</span>
+                    </button>
+                    <button class="action-btn logout-btn" onclick="logout()">
+                        <span class="btn-icon">🚪</span>
+                        <span>退出登录</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="info-footer">
+        <p class="footer-note">
+            <span class="note-icon">ℹ️</span>
+            如需修改更多信息，请联系系统管理员
+        </p>
+    </div>
+</div>
+
+<style>
+    .info-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .info-container h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 30px;
+        font-size: 2.5em;
+        border-bottom: 3px solid #3498db;
+        padding-bottom: 15px;
+    }
+    
+    .user-info-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin-bottom: 30px;
+    }
+    
+    .info-header {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+        padding: 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .info-header h2 {
+        margin: 0;
+        font-size: 1.8em;
+        font-weight: 600;
+    }
+    
+    .status-indicator {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 8px 16px;
+        border-radius: 20px;
+    }
+    
+    .status-dot {
+        width: 10px;
+        height: 10px;
+        background: #2ecc71;
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 1; }
+    }
+    
+    .status-text {
+        font-size: 0.9em;
+        font-weight: 500;
+    }
+    
+    .info-content {
+        padding: 30px;
+    }
+    
+    .info-section {
+        margin-bottom: 30px;
+    }
+    
+    .info-section h3 {
+        color: #34495e;
+        margin-bottom: 20px;
+        font-size: 1.3em;
+        border-left: 4px solid #3498db;
+        padding-left: 15px;
+    }
+    
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+    }
+    
+    .info-item {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+        border: 1px solid #e9ecef;
+        transition: all 0.3s ease;
+    }
+    
+    .info-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-color: #3498db;
+    }
+    
+    .info-label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+        color: #6c757d;
+        font-size: 0.9em;
+    }
+    
+    .info-label .icon {
+        font-size: 1.2em;
+    }
+    
+    .info-value {
+        font-size: 1.2em;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+    
+    .value-text {
+        color: #2c3e50;
+    }
+    
+    .value-placeholder {
+        color: #95a5a6;
+        font-style: italic;
+    }
+    
+    .status-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+    }
+    
+    .status-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+        border: 1px solid #e9ecef;
+    }
+    
+    .status-icon {
+        font-size: 2em;
+    }
+    
+    .status-details {
+        flex: 1;
+    }
+    
+    .status-title {
+        color: #6c757d;
+        font-size: 0.9em;
+        margin-bottom: 5px;
+    }
+    
+    .status-value {
+        font-size: 1.2em;
+        font-weight: 600;
+    }
+    
+    .status-value.active {
+        color: #27ae60;
+    }
+    
+    .role-badge {
+        display: inline-block;
+        background: #3498db;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.9em;
+        font-weight: 500;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+    
+    .action-btn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 6px;
+        font-size: 1em;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .edit-btn {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+    }
+    
+    .change-pwd-btn {
+        background: linear-gradient(135deg, #2ecc71, #27ae60);
+        color: white;
+    }
+    
+    .logout-btn {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        color: white;
+    }
+    
+    .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    .action-btn:active {
+        transform: translateY(0);
+    }
+    
+    .btn-icon {
+        font-size: 1.2em;
+    }
+    
+    .info-footer {
+        text-align: center;
+        padding: 20px;
+        color: #6c757d;
+        font-size: 0.9em;
+    }
+    
+    .footer-note {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
+    }
+    
+    .note-icon {
+        font-size: 1.2em;
+    }
+    
+    @media (max-width: 768px) {
+        .info-container {
+            padding: 10px;
+        }
+        
+        .info-container h1 {
+            font-size: 2em;
+        }
+        
+        .info-header {
+            flex-direction: column;
+            gap: 15px;
+            text-align: center;
+        }
+        
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .status-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .action-buttons {
+            flex-direction: column;
+        }
+        
+        .action-btn {
+            justify-content: center;
+        }
+    }
+</style>
+
+<script>
+    function editProfile() {
+        alert('编辑资料功能正在开发中...');
+        // window.location.href = '/blog/admin/dashboard/edit-profile';
+    }
+    
+    function changePassword() {
+        alert('修改密码功能正在开发中...');
+        // window.location.href = '/blog/admin/dashboard/change-password';
+    }
+    
+    function logout() {
+        if (confirm('确定要退出登录吗？')) {
+            // 创建表单提交退出请求
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/blog/admin/login/signOut';
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+    
+    // 页面加载完成后执行
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('个人信息页面加载完成');
+        console.log('用户ID:', '{{.id}}');
+        console.log('用户名:', '{{.name}}');
+        
+        // 可以在这里添加其他初始化逻辑
+    });
+</script>
+{{end}}

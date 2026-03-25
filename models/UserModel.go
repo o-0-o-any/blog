@@ -5,6 +5,8 @@ import "time"
 type UserModel struct {
 	ID        string `gorm:"primary_key"`
 	Name      string `gorm:"default: '暂未设置'"`
+	Age       int
+	Gender    string
 	Password  string
 	Role      int `gorm:"default: 1"`
 	CreatedAt time.Time

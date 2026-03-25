@@ -27,6 +27,7 @@ func InitRouters() *gin.Engine {
 
 		"templates/dashboard/layout.tmpl",
 		"templates/dashboard/edit.tmpl",
+		"templates/dashboard/info.tmpl",
 	)
 
 	// 注册Session中间件到全部路由中
@@ -70,6 +71,8 @@ func InitRouters() *gin.Engine {
 				// 博客编辑
 				dashboardGroup.GET("/edit", controller.EditHandler)
 				dashboardGroup.POST("/edit", controller.PostEditHandler)
+				// 个人信息展示
+				dashboardGroup.GET("/info", controller.InfoHandler)
 			}
 		}
 

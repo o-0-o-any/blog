@@ -55,3 +55,8 @@ func PostEditHandler(c *gin.Context) {
 		redirectHandler(c, "添加成功!", "/blog/admin/dashboard")
 	}
 }
+
+// ===== 个人信息界面 =====
+func InfoHandler(c *gin.Context) {
+	dashBoardHandler("templates/dashboard/info.tmpl")(c, nil)
+}
