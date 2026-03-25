@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>编辑</title>
+    <!-- 3秒后自动重定向核心配置 -->
+    <meta http-equiv="refresh" content="3;url={{ .redirectURL}}">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        .success-container {
+            text-align: center;
+            background: white;
+            padding: 40px 60px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .success-container h1 {
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+        .success-container p {
+            color: #666;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .success-container a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .success-container a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="success-container">
+        <h1>{{ .content }}</h1>
+        <p>即将跳转到目标页面，<span id="countdown">3</span>秒后自动跳转...</p>
+        <p>如果没有自动跳转，请点击 <a href="{{.redirectURL}}">这里</a> 手动跳转</p>
+    </div>
+
+    <!-- 可选：添加倒计时动画（增强体验） -->
+    <script>
+        let countdown = 3;
+        const countdownEl = document.getElementById('countdown');
+        const timer = setInterval(() => {
+            countdown--;
+            countdownEl.textContent = countdown;
+            if (countdown <= 0) {
+                clearInterval(timer);
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

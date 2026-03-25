@@ -1,0 +1,140 @@
+{{define "layout"}}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{block "title" .}}默认标题{{end}}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #2c3e50;
+            padding: 0 20px;
+            height: 60px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .nav-links {
+            display: flex;
+            gap: 1px;
+        }
+        .nav-btn {
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            padding: 0 20px;
+            height: 60px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .nav-btn:hover {
+            background-color: #34495e;
+        }
+        .nav-btn:active {
+            background-color: #1a252f;
+        }
+
+        /* 用户区域样式 */
+        .user-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-name-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .user-name-btn:hover {
+            background-color: #2980b9;
+        }
+        .logout-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .content {
+            padding: 40px;
+            text-align: center;
+            color: #333;
+        }
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 10px;
+            }
+            .nav-links {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            .nav-btn {
+                width: 33.33%;
+                padding: 10px 0;
+                height: auto;
+            }
+            .user-group {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-links">
+            <button class="nav-btn" onclick="window.location.href='/blog/index'">首页</button>
+            <button class="nav-btn" onclick="window.location.href='/blog/message'">博客</button>
+            <button class="nav-btn" onclick="window.location.href='/blog/driver'">导航</button>
+        </div>
+
+        <!-- 用户信息 + 退出按钮 -->
+        <div class="user-group">
+            <button class="user-name-btn" onclick="goDashboard()"> {{ .name }} </button>
+            <button class="logout-btn" onclick="submitLogout()">退出登录</button>
+        </div>
+    </nav>
+
+    <div class="content">
+        {{block "content" .}}默认内容{{end}}
+    </div>
+
+    <script>
+        // 跳转到后台首页
+        function goDashboard() {
+            window.location.href = "/blog/admin/dashboard";
+        }
+
+        // 【修复版】使用表单提交，让后端正常渲染延时跳转页面
+        function submitLogout() {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/blog/admin/login/signOut';
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
+</body>
+</html>
+{{end}}

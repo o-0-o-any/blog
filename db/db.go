@@ -4,6 +4,7 @@ import (
 	"blog/config"
 	"blog/models"
 	"fmt"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -30,7 +31,7 @@ func InitDB() {
 	}
 
 	// 根据项目中所需的Model自动在数据库中建表 实现表的自动迁移
-	if err := DB.AutoMigrate(&models.UserModel{}); err != nil {
+	if err := DB.AutoMigrate(&models.UserModel{}, &models.ArticlesModel{}); err != nil {
 		// 建表失败 后续操作有待添加
 		fmt.Println(err)
 		panic(err)

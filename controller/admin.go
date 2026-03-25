@@ -6,6 +6,7 @@ import (
 	"blog/utils"
 	"net/http"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -46,6 +47,7 @@ func htmlHandler(c *gin.Context, content, redirectURL string) {
 	})
 }
 func SignInHandler(c *gin.Context) {
+
 	id := c.PostForm("id")
 	password := c.PostForm("password")
 	result := repository.CheckUser(id)
@@ -58,10 +60,37 @@ func SignInHandler(c *gin.Context) {
 			if err != nil {
 				htmlHandler(c, "密码错误!", "/blog/admin/login")
 			} else {
-				htmlHandler(c, "登录成功!", "/blog/index")
+				// 登录成功 将数据以键值对形式写入Session中
+				// 得到当前请求的Session对象
+				session := sessions.Default(c)
+				// 数据存储
+				session.Set("id", id)
+				if err := session.Save(); err != nil {
+					htmlHandler(c, "登录失败!", "/blog/index")
+				} else {
+					htmlHandler(c, "登录成功!", "/blog/index")
+				}
 			}
 		}
 	} else {
 		htmlHandler(c, "账号不存在!", "/blog/admin/login")
 	}
+}
+
+func SignOutHandler(c *gin.Context) {
+	// 退出登录
+	// 可以执行这个函数的 都是已经登录过的 所以Cookie都不是空的
+	// 需要退出登录的话 就需要先清空Cookie
+	c.SetCookie(
+		"blog-session", // Cookie全称
+		"",             // 值清空
+		-1,             // 过期时间设置为-1 即立即删除
+		"/",            // 与前面保持一致
+		"",             // 域名
+		false,          // secure 是否仅HTTPS
+		true,           // 设置为true 防止js读取
+	)
+
+	// 然后重定向到当前界面的无登录的layout模板界面了  渲染延时重定向界面  防止卡住
+	htmlHandler(c, "正在退出中...", "/blog/index")
 }

@@ -15,7 +15,7 @@
 - **Bcrypt哈希加密**
 - **zap库搭建日志系统**
 - **JWT双Token认证**
-- **Session与Cookie**
+- **Session与Cookie的简单使用**
 - **Docker部署**
 
 
