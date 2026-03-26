@@ -104,7 +104,7 @@ func EditInfoHandler(c *gin.Context) {
 	user.Gender = c.PostForm("Gender")
 	user.Email = c.PostForm("Email")
 
-	// 这里不知道用啥方法了 反正就是判断至少有一个表单不是空的
+	// 这里不知道用啥方法了 反正就是判断至少有一个表单不是空的 暂时空住
 
 	// 延迟跳转到指定URL
 	redirectHandler(c, "修改成功!", "/blog/admin/"+c.Param("id")+"/dashboard/info")

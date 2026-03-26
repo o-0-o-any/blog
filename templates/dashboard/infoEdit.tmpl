@@ -1,0 +1,482 @@
+{{ template "layout" . }}
+{{define "title"}}编辑资料{{end}}
+{{define "content"}}
+<div class="edit-container">
+    <h1>编辑个人资料</h1>
+
+    <div class="edit-card">
+        <div class="edit-header">
+            <h2>修改个人信息</h2>
+            <p class="edit-subtitle">请填写以下信息，所有字段均为可选</p>
+        </div>
+
+        <form id="edit-form" action="/blog/admin/{{.id}}/dashboard/info/edit" method="POST">
+            <div class="form-content">
+                <div class="form-section">
+                    <h3>基本信息</h3>
+
+                    <div class="form-grid">
+                        <!-- 姓名 -->
+                        <div class="form-group">
+                            <label for="name" class="form-label">
+                                <span class="label-icon">👤</span>
+                                <span>姓名</span>
+                                <span class="optional-label">（可选）</span>
+                            </label>
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                class="form-input"
+                                placeholder="请输入您的姓名"
+                                value="{{if .name}}{{.name}}{{else}}{{end}}"
+                                maxlength="50"
+                            />
+                            <div class="input-hint">当前值：{{if .name}}{{.name}}{{else}}未设置{{end}}</div>
+                        </div>
+
+                        <!-- 年龄 -->
+                        <div class="form-group">
+                            <label for="age" class="form-label">
+                                <span class="label-icon">🎂</span>
+                                <span>年龄</span>
+                                <span class="optional-label">（可选）</span>
+                            </label>
+                            <input
+                                type="number"
+                                id="age"
+                                name="age"
+                                class="form-input"
+                                placeholder="请输入您的年龄"
+                                value="{{if .age}}{{.age}}{{else}}{{end}}"
+                                min="0"
+                                max="99"
+                                oninput="validateAge(this)"
+                            />
+                            <div class="input-hint">
+                                当前值：{{if .age}}{{.age}}{{else}}未设置{{end}}，请输入0-99之间的整数
+                            </div>
+                        </div>
+
+                        <!-- 性别 -->
+                        <div class="form-group">
+                            <label for="gender" class="form-label">
+                                <span class="label-icon">⚧</span>
+                                <span>性别</span>
+                                <span class="optional-label">（可选）</span>
+                            </label>
+                            <select
+                                id="gender"
+                                name="gender"
+                                class="form-select"
+                            >
+                                <option value="" {{if not .gender}}selected{{end}}>请选择性别</option>
+                                <option value="male" {{if eq .gender "male"}}selected{{end}}>男</option>
+                                <option value="female" {{if eq .gender "female"}}selected{{end}}>女</option>
+                            </select>
+                            <div class="input-hint">当前值：{{if .gender}}{{if eq .gender "male"}}男{{else}}女{{end}}{{else}}未设置{{end}}</div>
+                        </div>
+
+                        <!-- 邮箱 -->
+                        <div class="form-group">
+                            <label for="email" class="form-label">
+                                <span class="label-icon">📧</span>
+                                <span>邮箱</span>
+                                <span class="optional-label">（可选）</span>
+                            </label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                class="form-input"
+                                placeholder="请输入您的邮箱地址"
+                                value="{{if .email}}{{.email}}{{else}}{{end}}"
+                                maxlength="100"
+                            />
+                            <div class="input-hint">当前值：{{if .email}}{{.email}}{{else}}未设置{{end}}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>操作</h3>
+                    <div class="form-actions">
+                        <button type="submit" class="action-btn submit-btn">
+                            <span class="btn-icon">💾</span>
+                            <span>保存修改</span>
+                        </button>
+                        <button type="button" class="action-btn cancel-btn" onclick="cancelEdit()">
+                            <span class="btn-icon">❌</span>
+                            <span>取消</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="edit-footer">
+        <p class="footer-note">
+            <span class="note-icon">ℹ️</span>
+            所有字段均为可选，留空将保持原有值不变
+        </p>
+    </div>
+</div>
+
+<style>
+    .edit-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .edit-container h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 30px;
+        font-size: 2.5em;
+        border-bottom: 3px solid #3498db;
+        padding-bottom: 15px;
+    }
+
+    .edit-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin-bottom: 30px;
+    }
+
+    .edit-header {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+        padding: 25px;
+    }
+
+    .edit-header h2 {
+        margin: 0 0 10px 0;
+        font-size: 1.8em;
+        font-weight: 600;
+    }
+
+    .edit-subtitle {
+        margin: 0;
+        opacity: 0.9;
+        font-size: 0.95em;
+    }
+
+    .form-content {
+        padding: 30px;
+    }
+
+    .form-section {
+        margin-bottom: 30px;
+    }
+
+    .form-section h3 {
+        color: #34495e;
+        margin-bottom: 20px;
+        font-size: 1.3em;
+        border-left: 4px solid #3498db;
+        padding-left: 15px;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 25px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        color: #2c3e50;
+        font-weight: 500;
+        font-size: 0.95em;
+    }
+
+    .label-icon {
+        font-size: 1.2em;
+    }
+
+    .optional-label {
+        color: #95a5a6;
+        font-size: 0.85em;
+        font-weight: normal;
+    }
+
+    .form-input, .form-select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        font-size: 1em;
+        color: #333;
+        background: #fafafa;
+        transition: all 0.3s ease;
+    }
+
+    .form-input:focus, .form-select:focus {
+        outline: none;
+        border-color: #3498db;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    }
+
+    .form-input:hover, .form-select:hover {
+        border-color: #bdc3c7;
+    }
+
+    /* 数字输入框特定样式 */
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .input-hint {
+        margin-top: 5px;
+        color: #7f8c8d;
+        font-size: 0.85em;
+        min-height: 20px;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+    }
+
+    .action-btn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 6px;
+        font-size: 1em;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        min-width: 150px;
+        justify-content: center;
+    }
+
+    .submit-btn {
+        background: linear-gradient(135deg, #2ecc71, #27ae60);
+        color: white;
+    }
+
+    .cancel-btn {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        color: white;
+    }
+
+    .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .action-btn:active {
+        transform: translateY(0);
+    }
+
+    .btn-icon {
+        font-size: 1.2em;
+    }
+
+    .edit-footer {
+        text-align: center;
+        padding: 20px;
+        color: #6c757d;
+        font-size: 0.9em;
+    }
+
+    .footer-note {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
+    }
+
+    .note-icon {
+        font-size: 1.2em;
+    }
+
+    /* 验证样式 */
+    .form-input.valid {
+        border-color: #2ecc71;
+    }
+
+    .form-input.invalid {
+        border-color: #e74c3c;
+    }
+
+    .error-message {
+        color: #e74c3c;
+        font-size: 0.85em;
+        margin-top: 5px;
+        display: none;
+    }
+
+    @media (max-width: 768px) {
+        .edit-container {
+            padding: 10px;
+        }
+
+        .edit-container h1 {
+            font-size: 2em;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .action-btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<script>
+    // 年龄验证函数
+    function validateAge(input) {
+        const age = parseInt(input.value);
+        const errorElement = document.getElementById('age-error') || createErrorElement(input);
+
+        if (input.value === '') {
+            // 清空时移除验证状态
+            input.classList.remove('valid', 'invalid');
+            errorElement.style.display = 'none';
+            return true;
+        }
+
+        if (isNaN(age) || age < 0 || age > 99 || !Number.isInteger(age)) {
+            input.classList.remove('valid');
+            input.classList.add('invalid');
+            errorElement.textContent = '请输入0-99之间的整数';
+            errorElement.style.display = 'block';
+            return false;
+        } else {
+            input.classList.remove('invalid');
+            input.classList.add('valid');
+            errorElement.style.display = 'none';
+            return true;
+        }
+    }
+
+    // 创建错误提示元素
+    function createErrorElement(input) {
+        const errorElement = document.createElement('div');
+        errorElement.className = 'error-message';
+        errorElement.id = input.id + '-error';
+        input.parentNode.appendChild(errorElement);
+        return errorElement;
+    }
+
+    // 邮箱验证函数
+    function validateEmail(input) {
+        const email = input.value.trim();
+        const errorElement = document.getElementById('email-error') || createErrorElement(input);
+
+        if (email === '') {
+            input.classList.remove('valid', 'invalid');
+            errorElement.style.display = 'none';
+            return true;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            input.classList.remove('valid');
+            input.classList.add('invalid');
+            errorElement.textContent = '请输入有效的邮箱地址';
+            errorElement.style.display = 'block';
+            return false;
+        } else {
+            input.classList.remove('invalid');
+            input.classList.add('valid');
+            errorElement.style.display = 'none';
+            return true;
+        }
+    }
+
+    // 取消编辑
+    function cancelEdit() {
+        if (confirm('确定要取消编辑吗？所有未保存的更改将会丢失。')) {
+            window.location.href = '/blog/admin/' + '{{.id}}' + '/dashboard/info';
+        }
+    }
+
+    // 表单提交验证
+    document.getElementById('edit-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // 验证年龄
+        const ageInput = document.getElementById('age');
+        const ageValid = validateAge(ageInput);
+
+        // 验证邮箱
+        const emailInput = document.getElementById('email');
+        const emailValid = validateEmail(emailInput);
+
+        // 如果验证通过，提交表单
+        if (ageValid && emailValid) {
+            // 显示加载状态
+            const submitBtn = document.querySelector('.submit-btn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span class="btn-icon">⏳</span><span>保存中...</span>';
+            submitBtn.disabled = true;
+
+            // 提交表单
+            this.submit();
+        } else {
+            // 滚动到第一个错误的位置
+            const firstError = document.querySelector('.form-input.invalid');
+            if (firstError) {
+                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                firstError.focus();
+            }
+        }
+    });
+
+    // 为输入框添加事件监听
+    document.addEventListener('DOMContentLoaded', function() {
+        const ageInput = document.getElementById('age');
+        const emailInput = document.getElementById('email');
+
+        ageInput.addEventListener('blur', function() {
+            validateAge(this);
+        });
+
+        emailInput.addEventListener('blur', function() {
+            validateEmail(this);
+        });
+
+        // 初始化验证状态
+        validateAge(ageInput);
+        validateEmail(emailInput);
+
+        console.log('编辑页面加载完成，用户ID:', '{{.id}}');
+    });
+</script>
+{{end}}
