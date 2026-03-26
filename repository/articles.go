@@ -38,3 +38,29 @@ func OrderByIDSearchElem(id string) (models.ArticlesModel, error) {
 	}
 	return article, nil
 }
+
+func GetArticleNums() int {
+	var count int64
+	if err := db.DB.Model(&models.ArticlesModel{}).Count(&count).Error; err != nil {
+		return -1
+	}
+	return int(count)
+}
+
+func UpdateArticleInfo(article models.ArticlesModel) error {
+	if err := db.DB.Model(&models.ArticlesModel{}).Where("id = ?", article.Id).Updates(article).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+// 找到对应作者的全部博客文章
+func FindUserAllArticle(author string) ([]models.ArticlesModel, error) {
+	articles := make([]models.ArticlesModel, 0, 10)
+
+	err := db.DB.Where("author = ?", author).Find(&articles).Error
+	if err != nil {
+		return articles, err
+	}
+	return articles, err
+}

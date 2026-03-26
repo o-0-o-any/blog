@@ -59,6 +59,36 @@
                         </div>
                     </div>
                     
+                    <!-- 新增：年龄 -->
+                    <div class="info-item">
+                        <div class="info-label">
+                            <span class="icon">🎂</span>
+                            <span>年龄</span>
+                        </div>
+                        <div class="info-value">
+                            {{if .age}}
+                                <span class="value-text">{{.age}}</span>
+                            {{else}}
+                                <span class="value-placeholder">未设置</span>
+                            {{end}}
+                        </div>
+                    </div>
+
+                    <!-- 新增：性别 -->
+                    <div class="info-item">
+                        <div class="info-label">
+                            <span class="icon">⚧️</span>
+                            <span>性别</span>
+                        </div>
+                        <div class="info-value">
+                            {{if .gender}}
+                                <span class="value-text">{{.gender}}</span>
+                            {{else}}
+                                <span class="value-placeholder">未设置</span>
+                            {{end}}
+                        </div>
+                    </div>
+
                     <div class="info-item">
                         <div class="info-label">
                             <span class="icon">📅</span>

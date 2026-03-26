@@ -1,6 +1,132 @@
 {{ template "layout" . }}
-{{define "title"}}首页{{end}}
+{{define "title"}}博客首页{{end}}
 {{define "content"}}
-    <h1>欢迎来到首页</h1>
-    <p>这是网站的首页内容</p>
+<div class="home-container">
+    <!-- 统计卡片区域 -->
+    <div class="stats-section">
+        <div class="stat-card">
+            <div class="stat-number">{{.usernums}}</div>
+            <div class="stat-label">使用用户</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{.blognums}}</div>
+            <div class="stat-label">博客文章</div>
+        </div>
+    </div>
+
+    <!-- 介绍卡片 -->
+    <div class="intro-card">
+        <h2>关于本博客平台</h2>
+        <div class="intro-content">
+            <p>本网站采用前后端分离架构，后端基于 <strong>Gin</strong> 框架与 <strong>GORM</strong> ORM 库构建，提供稳定高效的数据处理能力（Redis 暂未集成）。前端页面利用 <strong>DeepSeek、豆包、ChatGPT</strong> 等 AI 工具辅助生成，并通过后端接口动态渲染数据。部分模板中嵌入了前端逻辑处理，以实现更流畅的交互体验。</p>
+            <p>这是一个面向所有用户的公共博客平台，非个人站点。我们致力于为每位访客提供简洁、易用的写作与阅读环境。当前平台已开放注册与发文功能，欢迎体验！</p>
+            <p class="update-time">最后更新：2026年3月</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .home-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    /* 统计卡片区域 */
+    .stats-section {
+        display: flex;
+        gap: 30px;
+        justify-content: center;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        padding: 30px 40px;
+        text-align: center;
+        min-width: 200px;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .stat-number {
+        font-size: 48px;
+        font-weight: bold;
+        color: #3498db;
+        margin-bottom: 10px;
+    }
+
+    .stat-label {
+        font-size: 18px;
+        color: #666;
+        letter-spacing: 1px;
+    }
+
+    /* 介绍卡片 */
+    .intro-card {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        margin-top: 10px;
+    }
+
+    .intro-card h2 {
+        margin-top: 0;
+        margin-bottom: 20px;
+        color: #2c3e50;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 10px;
+        font-size: 28px;
+    }
+
+    .intro-content {
+        font-size: 16px;
+        line-height: 1.8;
+        color: #333;
+    }
+
+    .intro-content p {
+        margin-bottom: 18px;
+    }
+
+    .intro-content strong {
+        color: #3498db;
+    }
+
+    .update-time {
+        font-size: 14px;
+        color: #999;
+        margin-top: 20px;
+        text-align: right;
+        font-style: italic;
+    }
+
+    /* 响应式 */
+    @media (max-width: 768px) {
+        .stat-card {
+            padding: 20px 30px;
+            min-width: 150px;
+        }
+        .stat-number {
+            font-size: 36px;
+        }
+        .stat-label {
+            font-size: 16px;
+        }
+        .intro-card {
+            padding: 20px;
+        }
+        .intro-card h2 {
+            font-size: 24px;
+        }
+    }
+</style>
 {{end}}

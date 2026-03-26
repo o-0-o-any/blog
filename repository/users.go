@@ -41,9 +41,24 @@ func GetUser(id string) (models.UserModel, error) {
 }
 
 func UpdateUser(user models.UserModel) error {
-	err := db.DB.Model(&user).Updates(user).Error
+	// err := db.DB.Save(&user).Error  错误 传入的user没有给主键赋值 会被当成新的记录进行更新
+	err := db.DB.Model(&models.UserModel{}).Where("id = ?", user.ID).Updates(user).Error
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+func GetUserNums() int {
+	var count int64
+	if err := db.DB.Model(&models.UserModel{}).Count(&count).Error; err != nil {
+		return -1
+	}
+	return int(count)
+}
+
+func JudgeNameisExit(name string) bool {
+	var count int64
+	db.DB.Model(&models.UserModel{}).Where("name = ?", name).Count(&count)
+	return count > 0
 }

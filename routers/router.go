@@ -76,6 +76,8 @@ func InitRouters() *gin.Engine {
 				dashboardGroup.GET("/info", controller.InfoHandler)
 				dashboardGroup.GET("/info/edit", controller.EditInfoHTMLHandler)
 				dashboardGroup.POST("/info/edit", controller.EditInfoHandler)
+				// 展示个人发布的博客  与下面/message/article/:id的类似  id似乎有点重复了  这里先使用blogID 其他地方先不改
+				dashboardGroup.GET("/article/:blogID", controller.PerMessageHandler)
 			}
 		}
 
@@ -83,7 +85,7 @@ func InitRouters() *gin.Engine {
 		blogGroup := allGroup.Group("/message")
 		{
 			// 博客网页
-			blogGroup.GET("/article/:id", controller.PerMessageHandler)
+			blogGroup.GET("/article/:blogID", controller.PerMessageHandler)
 		}
 
 	}

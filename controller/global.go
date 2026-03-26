@@ -2,11 +2,11 @@ package controller
 
 import (
 	"blog/repository"
+	"blog/utils"
 	"html/template"
 	"net/http"
 	"strconv"
 
-	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,17 +18,16 @@ const (
 func handler(templateFile string) func(c *gin.Context, data any) {
 	return func(c *gin.Context, data any) {
 		var layoutFile string
-		// ===根据Session判断是否登录 然后决定使用哪个layout模板===
-		session := sessions.Default(c)
-		id := session.Get("id")
-		if id != nil {
+		// =====根据Session判断是否登录 然后决定使用哪个layout模板=====
+		id := utils.GetSessionData(c)
+		if id != "" {
 			// 登录状态
 			layoutFile = LayoutSignIn
 		} else {
 			layoutFile = LayoutSignOut
 		}
 
-		// ===解析组合模板===
+		// =====解析组合模板=====
 		t, err := template.ParseFiles(layoutFile, templateFile)
 		if err != nil {
 			c.JSON(http.StatusOK, gin.H{
@@ -36,7 +35,7 @@ func handler(templateFile string) func(c *gin.Context, data any) {
 			})
 		}
 
-		// ===对数据处理 在data基础上新增JSON数据===
+		// =====对数据处理 在data基础上新增JSON数据=====
 		allData := gin.H{
 			"name": id,
 		}
@@ -48,7 +47,7 @@ func handler(templateFile string) func(c *gin.Context, data any) {
 			}
 		}
 
-		// ===渲染组合模板===
+		// =====渲染组合模板=====
 		err = t.ExecuteTemplate(c.Writer, "layout", allData)
 		if err != nil {
 			c.JSON(http.StatusOK, gin.H{
@@ -60,7 +59,10 @@ func handler(templateFile string) func(c *gin.Context, data any) {
 
 func IndexHandler(c *gin.Context) {
 	f := handler("templates/index/index.tmpl")
-	f(c, nil)
+	f(c, gin.H{
+		"usernums": repository.GetUserNums(),
+		"blognums": repository.GetArticleNums(),
+	})
 }
 
 // uint类型转换成string类型

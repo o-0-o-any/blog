@@ -17,7 +17,7 @@ func redirectHandler(c *gin.Context, content, redirectURL string) {
 
 func PerMessageHandler(c *gin.Context) {
 	// 获取访问的博客id
-	id := c.Param("id")
+	id := c.Param("blogID")
 	// 根据id在数据库中查找指定的博客
 	article, err := repository.OrderByIDSearchElem(id)
 	if err != nil {
