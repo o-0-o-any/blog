@@ -32,7 +32,17 @@ func SignUpHandler(c *gin.Context) {
 		if err != nil {
 			htmlHandler(c, "注册失败!系统异常!", "/blog/admin/login")
 		} else {
-			htmlHandler(c, "注册成功!已自动为你登录!", "/blog/index")
+			// 注册成功 将账号信息写入session中
+			session := sessions.Default(c)
+			// 数据存储
+			session.Set("id", id)
+			var content string
+			if err := session.Save(); err != nil {
+				content = "注册成功!登录跳转失败!请手动登录!"
+			} else {
+				content = "注册成功!已自动为你登录!"
+			}
+			htmlHandler(c, content, "/blog/index")
 		}
 	} else {
 		htmlHandler(c, "注册失败!账号已被注册!", "/blog/admin/login")
