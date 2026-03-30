@@ -28,9 +28,10 @@ func PerMessageHandler(c *gin.Context) {
 	// 渲染显示博客的界面
 	// 防止覆盖/blog/message/edit的界面 使用global中的handler函数间接渲染模板
 	handler("templates/message/article.tmpl")(c, gin.H{
-		"title":  article.Title,
-		"author": article.Author,
-		"date":   article.Date,
-		"text":   article.Text,
+		"title":       article.Title,
+		"author":      article.Author,
+		"date":        article.Date,
+		"text":        article.Text,
+		"redirectURL": "/blog/message",
 	})
 }
