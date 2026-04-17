@@ -3,8 +3,10 @@ package db
 import (
 	"blog/config"
 	"blog/models"
+	"blog/utils"
 	"fmt"
 
+	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -32,8 +34,8 @@ func InitDB() {
 
 	// 根据项目中所需的Model自动在数据库中建表 实现表的自动迁移
 	if err := DB.AutoMigrate(&models.UserModel{}, &models.ArticlesModel{}); err != nil {
-		// 建表失败 后续操作有待添加
-		fmt.Println(err)
+		utils.Logger.Error("数据库表迁移失败", zap.Error(err))
 		panic(err)
 	}
+	utils.Logger.Info("数据库表迁移成功")
 }

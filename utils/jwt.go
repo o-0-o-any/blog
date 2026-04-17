@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"go.uber.org/zap"
 )
 
 // Token密钥
@@ -43,5 +44,7 @@ func ParseToken(tokenStr string) (*models.Claim, error) {
 	if claims, ok := token.Claims.(*models.Claim); ok && token.Valid {
 		return claims, nil
 	}
+	Logger.Error("token is invalid", zap.Error(err))
+
 	return nil, fmt.Errorf("token is invalid %v", err)
 }
